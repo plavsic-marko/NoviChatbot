@@ -101,7 +101,7 @@ To deploy this project to GitHub:
    git add .
    git commit -m "Initial commit"
    git branch -M main
-   git remote add origin https://github.com/your-username/NoviChatbot.git
+   git remote add origin https://github.com/plavsic-marko/NoviChatbot.git
    git push -u origin main
    ```
 
@@ -123,5 +123,5 @@ Contributions are welcome! Feel free to open issues or submit pull requests.
 
 If you have any questions or need further assistance, feel free to reach out:
 
-- **Email**: your-email@example.com
-- **GitHub**: [https://github.com/your-username](https://github.com/your-username)
+- **Email**: plavsicmarko10@gmail.com
+- **GitHub**: [https://github.com/plavsic-marko](https://github.com/plavsic-marko)
