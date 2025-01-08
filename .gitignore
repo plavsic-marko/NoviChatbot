@@ -1,0 +1,55 @@
+# Python virtual environment
+venv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Environment variables
+.env
+
+# Gradio temporary files
+*.gradio
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# Pytest cache
+.pytest_cache/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Compiled files
+*.so
+*.dll
+*.dylib
+
+# Backup files
+*~
+*.bak
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Python egg info
+*.egg-info/
+dist/
+build/
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
+# MyPy type checker cache
+.mypy_cache/
+
+temp_file.pdf
+
