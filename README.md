@@ -4,6 +4,12 @@ Welcome to **Personalized PDF Chatbot** project! This application allows users t
 
 ---
 
+## 🖼️ **Project Preview**
+
+![PDF Chatbot Screenshot](slika 2.png)
+
+---
+
 ## 📋 **Project Features**
 
 - Upload and process **one or more PDF documents**.

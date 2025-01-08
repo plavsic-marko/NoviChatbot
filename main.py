@@ -17,11 +17,11 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 
 def load_and_create_db(uploaded_files):
     docs = []
-    for file_path in uploaded_files:
-        if file_path is None:
+    for uploaded_file in uploaded_files:
+        if uploaded_file is None:
             continue
-        # Učitaj PDF fajl koristeći putanju
-        loader = PyPDFLoader(file_path)
+        # Učitaj PDF fajl direktno iz Gradio fajl objekta
+        loader = PyPDFLoader(uploaded_file.name)
         docs.extend(loader.load())
 
     text_splitter = RecursiveCharacterTextSplitter(
@@ -40,50 +40,55 @@ llm = ChatOpenAI(model_name="gpt-4", temperature=0)
 # Funkcija za chat
 
 
-def chatbot(input_text, chat_history=[], db=None):
-    try:
-        # Proveri da li je baza kreirana
-        if db is None:
-            return "Nema dostupnih dokumenata za pretragu. Molimo učitajte PDF fajlove."
-
-        # Pretraži relevantne dokumente
-        retriever = db.as_retriever(
-            search_type="similarity", search_kwargs={"k": 3})
-        relevant_docs = retriever.invoke(input_text)
-
-        # Kreiraj kontekst iz dokumenata
-        context = "\n".join([doc.page_content for doc in relevant_docs])
-
-        # Kreiraj upit sa kontekstom
-        query = f"{context}\n\nQuestion: {input_text}"
-
-        # Generiši odgovor
-        response = llm.invoke([HumanMessage(content=query)])
-
-        # Vraćanje odgovora
-        return response.content
-    except Exception as e:
-        return f"ERROR: {str(e)}"
+def search_documents(query, db):
+    retriever = db.as_retriever(
+        search_type="similarity", search_kwargs={"k": 3})
+    relevant_docs = retriever.invoke(query)
+    context = "\n".join([doc.page_content for doc in relevant_docs])
+    return context
 
 
-# Gradio GUI sa personalizovanim UI-jem
-with gr.Blocks() as demo:
-    gr.Markdown("# 🤖 Personalized PDF Chatbot")
+def generate_response(context, user_input):
+    query = f"{context}\n\nQuestion: {user_input}"
+    response = llm.invoke([HumanMessage(content=query)])
+    return response.content
+
+
+def chatbot(input_text, db=None):
+    if db is None:
+        return "Nema dostupnih dokumenata za pretragu. Molimo učitajte PDF fajlove."
+
+    context = search_documents(input_text, db)
+    if not context:
+        return "Nisam pronašao relevantne informacije u dokumentima."
+
+    return generate_response(context, input_text)
+
+
+# Gradio GUI sa unapređenim UI-jem
+with gr.Blocks(theme=gr.themes.Soft()) as demo:
+    gr.Markdown("# 🤖 **PDF Chatbot Assistant**")
     gr.Markdown("""
-    ### Dobrodošli u vaš PDF Chatbot!
-    - Učitajte jedan PDF dokument.
-    - Postavite pitanja vezana za sadržaj dokumenata.
+    ### Dobrodošli u vaš personalizovani PDF Chatbot!
+    - 📄 **Učitajte jedan ili više PDF dokumenata.**
+    - ❓ **Postavite pitanja vezana za sadržaj dokumenata.**
+    - 💬 **Dobijte pametne odgovore na osnovu sadržaja.**
+    
+    Napravljen sa ❤️ koristeći Gradio i LangChain.
     """)
 
     with gr.Row():
-        uploaded_file = gr.File(label="📄 Upload PDF", file_types=[
-                                ".pdf"], interactive=True)
+        uploaded_file = gr.File(
+            label="📄 **Upload PDF Fajla**", file_types=[".pdf"], interactive=True)
 
-    reset_btn = gr.Button("🔄 Reset Chat")
+    with gr.Row():
+        query = gr.Textbox(label="❓ **Postavite pitanje**",
+                           placeholder="Unesite vaše pitanje ovde...")
+        output = gr.Textbox(label="💬 **Odgovor**")
 
-    query = gr.Textbox(label="Postavite pitanje")
-    output = gr.Textbox(label="Odgovor")
+    reset_btn = gr.Button("🔄 **Reset Chat**")
 
+    # Event handlers
     def reset_chat():
         return ""
 
