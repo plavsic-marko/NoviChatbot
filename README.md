@@ -6,7 +6,7 @@ Welcome to **Personalized PDF Chatbot** project! This application allows users t
 
 ## 🖼️ **Project Preview**
 
-![PDF Chatbot Screenshot](slika 2.png)
+![PDF Chatbot Screenshot](slika.png)
 
 ---
 
