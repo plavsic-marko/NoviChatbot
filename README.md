@@ -29,7 +29,7 @@ Welcome to **Personalized PDF Chatbot** project! This application allows users t
 NoviChatbot/
 ├── main.py               # Main application script
 ├── requirements.txt      # Dependencies for the project
-├── .env                  # Environment variables (e.g., OpenAI API key)
+├── .gitignore            # Git ignore rules
 ├── venv/                 # Virtual environment (optional)
 └── README.md             # Project documentation
 ```
