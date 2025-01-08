@@ -17,16 +17,12 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 
 def load_and_create_db(uploaded_files):
     docs = []
-    for file in uploaded_files:
-        if file is None:
+    for file_path in uploaded_files:
+        if file_path is None:
             continue
-        # Sačuvaj privremeni fajl na disku
-        file_path = "temp_file.pdf"
-        with open(file_path, "wb") as f:
-            f.write(file)  # Direktno piši sadržaj fajla
+        # Učitaj PDF fajl koristeći putanju
         loader = PyPDFLoader(file_path)
         docs.extend(loader.load())
-        os.remove(file_path)  # Obriši privremeni fajl nakon učitavanja
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1500, chunk_overlap=150)
@@ -94,6 +90,8 @@ with gr.Blocks() as demo:
     def process_query(file, user_input):
         if file is None:
             return "Molimo učitajte PDF fajl pre nego što postavite pitanje."
+
+        # Prosledi putanju fajla direktno loader-u
         db = load_and_create_db([file])
         return chatbot(user_input, db=db)
 
