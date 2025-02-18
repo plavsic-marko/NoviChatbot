@@ -49,7 +49,7 @@ Follow these steps to run the project locally:
 ### 1️⃣ **Clone the Repository**
 
 ```bash
-git clone https://github.com/your-username/NoviChatbot.git
+git clone https://github.com/plavsic-marko/NoviChatbot.git
 cd NoviChatbot
 ```
 
